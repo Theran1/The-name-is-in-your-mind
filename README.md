@@ -11,7 +11,6 @@ TA TA TAAAAAAAAAAAAAAAAAAA
 Aint nobody bringin us down down down down 
 
 
-=======
 ░░░░░░░░▄▄▄▀▀▀▄▄███▄ 	
 
 ░░░░░▄▀▀░░░░░░░▐░▀██▌ 
