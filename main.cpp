@@ -16,6 +16,8 @@ int main(int argc, char* argv[]) {
 	//The surface contained by the window
 	SDL_Surface* screenSurface = NULL;
 
+
+
 	//Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
@@ -46,6 +48,10 @@ int main(int argc, char* argv[]) {
 	
 
 		while (1) {
+
+
+
+
 
 
 
