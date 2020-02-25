@@ -19,6 +19,8 @@ int main(int argc, char* argv[]) {
 	//The surface contained by the window
 	SDL_Surface* screenSurface = NULL;
 
+
+
 	//Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
@@ -63,6 +65,7 @@ int main(int argc, char* argv[]) {
 					//fill the smoll rectangle
 					SDL_FillRect(screenSurface, &rect1, SDL_MapRGB(screenSurface->format, 0xfc, 0x17, 0x08));
 
+
 					//fill the smoll rectangle 2 
 					SDL_FillRect(screenSurface, &rect2, SDL_MapRGB(screenSurface->format, 0xff, 0xaa, 0xaa));
 
@@ -92,6 +95,13 @@ int main(int argc, char* argv[]) {
 
 				//Update the surface
 				SDL_UpdateWindowSurface(window);
+
+
+
+
+
+		}
+
 
 				while (SDL_PollEvent(&e) != 0){
 						//User requests quit
