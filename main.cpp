@@ -76,8 +76,7 @@ int main(int argc, char* argv[]) {
 						if (rect1.y > screenSurface->h) rect1.y = 0;
 					}
 
-					//fill the smoll rectangle 2 
-					SDL_FillRect(screenSurface, &rect2, SDL_MapRGB(screenSurface->format, 0xff, 0xaa, 0x
+
 
 
 					//move the smoll rectangle
