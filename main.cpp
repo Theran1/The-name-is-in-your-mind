@@ -9,7 +9,8 @@
 
 int main(int argc, char* argv[]) {
 
-	bool stoprect1 = false; 
+	
+	//stop loading
 	bool loading_screen = true;
 
 
@@ -40,6 +41,11 @@ int main(int argc, char* argv[]) {
 			//Main loop flag
 			bool quit = false;
 
+
+			//other bools
+			bool rect1_move = true;
+			bool shoot = false;
+
 			//Event handler
 			SDL_Event e;
 
@@ -47,36 +53,36 @@ int main(int argc, char* argv[]) {
 			screenSurface = SDL_GetWindowSurface(window);
 
 			//create a smolll rectangle
-			
-			SDL_Rect  rect1 = { 0, 0, 69, 420 };
-			SDL_Rect  rect2 = { 200, 200, 420, 69 };
 
-			SDL_Rect PedroRect = { 0, 0 , 300, 300 };
+			SDL_Rect  rect1 = { 0, 0, 690, 420 };
+			SDL_Rect  rect2 = { 100, 250, 420, 69 };
+
+			SDL_Rect PedroRect = { 300, 300 , 300, 300 };
 
 
-			while (!quit) {
+			while (!quit) {                            //MAin Loop
 
-				//Fill the surface with a color
-				SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0x60, 0x16, 0xfa));
+
+				
 
 				if (loading_screen) {
-					
+					//Fill the surface with a color
+					SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0x60, 0x16, 0xfa));
 
 					//fill the smoll rectangle
 					SDL_FillRect(screenSurface, &rect1, SDL_MapRGB(screenSurface->format, 0xfc, 0x17, 0x08));
 
-
 					//fill the smoll rectangle 2 
-					SDL_FillRect(screenSurface, &rect2, SDL_MapRGB(screenSurface->format, 0xff, 0xaa, 0xaa));
+					SDL_FillRect(screenSurface, &rect2, SDL_MapRGB(screenSurface->format, 0xff, 0xfb, 0x0d));
 
-
+					
 
 					//move the smoll rectangle
-					if (!stoprect1) {
+					if (rect1_move) {
 						rect1.x++;
 						rect1.y++;
-						if (rect1.x > screenSurface->w) rect1.x = 0;
-						if (rect1.y > screenSurface->h) rect1.y = 0;
+						if (rect1.x+rect1.w > screenSurface->w) rect1.x = 0;
+						if (rect1.y+rect1.h > screenSurface->h) rect1.y = 0;
 					}
 
 
@@ -85,78 +91,111 @@ int main(int argc, char* argv[]) {
 					//move the smoll rectangle
 					rect2.x++;
 					rect2.y++;
-					if (rect2.x > screenSurface->w) rect2.x = 0;
-					if (rect2.y > screenSurface->h) rect2.y = 0;
+					if (rect2.x + rect2.w > screenSurface->w) rect2.x = 0;
+					if (rect2.y + rect2.h > screenSurface->h) rect2.y = 0;
 				}
-				else {
-					delete(&rect1);
-					delete(&rect2);
+				
+
+				
+
+				if (!loading_screen) {
+					//Fill the surface with a color
+					SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xf9, 0x78, 0x07));
+
+					SDL_FillRect(screenSurface, &PedroRect, SDL_MapRGB(screenSurface->format, 0x02, 0x92, 0x29));
+
+
+					
+
 				}
+
 
 				//Update the surface
 				SDL_UpdateWindowSurface(window);
 
 
 
+				while (SDL_PollEvent(&e) != 0) {
+					//User requests quit
 
-
-		}
-
-
-				while (SDL_PollEvent(&e) != 0){
-						//User requests quit
-
-						if (e.type == SDL_QUIT)
+					if (e.type == SDL_QUIT)
+					{
+						quit = true;
+					}
+					//User presses a key
+ 					else if (e.type == SDL_KEYDOWN)
+					{
+						switch (e.key.keysym.sym)
 						{
+						case SDLK_SPACE:   //create communism
+							rect1.x = 0;
+							rect1.y = 0;
+							rect1.w = screenSurface->w;
+							rect1.h = screenSurface->h;
+							
+							rect1_move = false;
+							break;
+
+						case SDLK_ESCAPE:
 							quit = true;
+							break;
+
+						case SDLK_g:
+							loading_screen = false;
+							break;
+
+
+						
+						default:
+							break;
+
 						}
-						//User presses a key
-						else if (e.type == SDL_KEYDOWN)
-						{
+
+
+						if (!loading_screen) {
 							switch (e.key.keysym.sym)
 							{
-							case SDLK_SPACE:
-								rect1.x = 0;
-								rect1.y = 0;
-								rect1.w = screenSurface->w;
-								rect1.h = screenSurface->h;
-								stoprect1 = true;
+							case SDLK_w:
+								PedroRect.y = PedroRect.y - 25;
 								break;
-
-							case SDLK_ESCAPE:
-								quit = true;
-								break;
-
-							case SDLK_g: 
-								loading_screen = false;
-								break;
-
-
-							case SDLK_w: 
-								PedroRect.y -= 20;
 							case SDLK_a:
 								PedroRect.x -= 20;
 								break;
+							case SDLK_s:
+								PedroRect.y += 20;
+								break;
+							case SDLK_d:
+								PedroRect.x += 20;
+								break;
+							case SDLK_SPACE:
+								shoot = true;
+
 							default:
 								break;
 
 							}
 
 
+
 						}
 
 
 
+					}
+
+
+
 				}
-
-					
-				
-
 			}
 
-
 		}
+
+
+
+
+
 	}
+
 
 	return 0;
 
