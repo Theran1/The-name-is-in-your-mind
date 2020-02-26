@@ -1,10 +1,12 @@
 #include <iostream>
 #include <stdlib.h>
 #include "SDL/include/SDL.h"
+#include "SDL2_image/include/SDL_image.h"
 
 
 #pragma comment(lib, "SDL/libx86/SDL2.lib")
 #pragma comment(lib, "SDL/libx86/SDL2main.lib")
+#pragma comment(lib, "SDL2_image/lib_x86/SDL2_image.lib")
 
 
 int main(int argc, char* argv[]) {
@@ -23,7 +25,7 @@ int main(int argc, char* argv[]) {
 
 
 	//Initialize SDL
-	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+	if ( (SDL_Init(SDL_INIT_VIDEO)< 0 || (IMG_Init(IMG_INIT_PNG)) < 0))
 	{
 		printf("SDL could not initialize Weboooon! SDL_Error: %s\n", SDL_GetError());
 	}
@@ -31,6 +33,10 @@ int main(int argc, char* argv[]) {
 	{
 		//Create window
 		window = SDL_CreateWindow("Mah 1st Windo M8", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1080, 720, SDL_WINDOW_SHOWN);
+
+		/*SDL_Surface* surfa = IMG_Load();*/
+
+
 		if (window == NULL)
 		{
 			printf("Window could not be created Webooon! SDL_Error: %s\n", SDL_GetError());
@@ -196,6 +202,12 @@ int main(int argc, char* argv[]) {
 
 	}
 
+
+
+
+
+	SDL_QUIT;
+	IMG_Quit();
 
 	return 0;
 
