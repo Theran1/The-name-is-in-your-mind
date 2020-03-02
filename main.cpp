@@ -22,10 +22,21 @@ int main(int argc, char* argv[]) {
 	//The surface contained by the window
 	SDL_Surface* screenSurface = NULL;
 
+	//to create and render
+	SDL_Surface* Background = NULL;
+	SDL_Surface* Bullet = NULL;
+	SDL_Surface* Ship = NULL;
+
+	SDL_Rect shipRect = { 69, 420, 200, 200 };
+	SDL_Rect BulletRect = { shipRect.x + shipRect.w, shipRect.y + (shipRect.h / 2), 50, 25 };
+
+	//the creator of everything
+	SDL_Renderer* renderer = NULL;
+
 
 
 	//Initialize SDL
-	if ( (SDL_Init(SDL_INIT_VIDEO)< 0 || (IMG_Init(IMG_INIT_PNG)) < 0))
+	if ( (SDL_Init(SDL_INIT_VIDEO)< 0))
 	{
 		printf("SDL could not initialize Weboooon! SDL_Error: %s\n", SDL_GetError());
 	}
@@ -58,12 +69,58 @@ int main(int argc, char* argv[]) {
 			//Get window surface
 			screenSurface = SDL_GetWindowSurface(window);
 
+			//Create the images, make sure they work etc, with teh renderer
+			renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);  //the window is where to render, the -1: Unkown
+			if (renderer == NULL) {
+				std::cout << " Renderer could not be created, you fool" << std::endl;
+				std::cout << "SDL_error" <<SDL_GetError() << std::endl;
+
+			}
+			else {
+				int flags = IMG_INIT_JPG | IMG_INIT_PNG;
+				if (IMG_Init(flags) & flags != flags) {
+					std::cout << " IMG could not be created, you fool" << std::endl;
+					std::cout << "SDL_error" << IMG_GetError() << std::endl;
+				}
+				else {
+					
+
+
+					Bullet = IMG_Load("Bullet.jpg");
+					if (!Bullet) {
+						std::cout << "IMG_Load: " << IMG_GetError() << std::endl;
+					}
+
+					Background = IMG_Load("Background.jpg");
+					if (!Background) {
+						std::cout << "IMG_Load: " << IMG_GetError() << std::endl;
+					}
+
+					Ship = IMG_Load("Ship.png");
+					if (!Ship) {
+						std::cout << "IMG_Load: " << IMG_GetError() << std::endl;
+					}
+				}
+
+
+			}
+
+			//Create the textures
+			SDL_Texture* shipTexture = SDL_CreateTextureFromSurface(renderer, Ship);
+			SDL_Texture* backgroundTexture = SDL_CreateTextureFromSurface(renderer, Background);
+			SDL_Texture* bulletTexture = SDL_CreateTextureFromSurface(renderer, Bullet);
+			
+
+
+		
+
+
 			//create a smolll rectangle
 
 			SDL_Rect  rect1 = { 0, 0, 690, 420 };
 			SDL_Rect  rect2 = { 100, 250, 420, 69 };
 
-			SDL_Rect PedroRect = { 300, 300 , 300, 300 };
+	/*		SDL_Rect PedroRect = { 300, 300 , 300, 300 };*/
 
 
 			while (!quit) {                            //MAin Loop
@@ -71,7 +128,7 @@ int main(int argc, char* argv[]) {
 
 				
 
-				if (loading_screen) {
+				if (loading_screen) { //loading screen
 					//Fill the surface with a color
 					SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0x60, 0x16, 0xfa));
 
@@ -103,15 +160,24 @@ int main(int argc, char* argv[]) {
 				
 
 				
-
+				
 				if (!loading_screen) {
 					//Fill the surface with a color
-					SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xf9, 0x78, 0x07));
+					/*SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xf9, 0x78, 0x07));*/
+					//to create a rectangle wit the renderer
+					//SDL_SetRenderDrawColor(renderer, 0x4c, 0a6, 0xff, 1)
 
-					SDL_FillRect(screenSurface, &PedroRect, SDL_MapRGB(screenSurface->format, 0x02, 0x92, 0x29));
-
-
+					/*SDL_FillRect(screenSurface, &PedroRect, SDL_MapRGB(screenSurface->format, 0x02, 0x92, 0x29));*/
 					
+					
+
+					SDL_RenderClear(renderer);    //Wipes everything and cleans up
+					
+					SDL_RenderCopy(renderer, backgroundTexture, NULL, NULL);
+
+					SDL_RenderCopy(renderer, shipTexture, NULL, &shipRect);
+
+					SDL_RenderPresent(renderer);
 
 				}
 
@@ -131,7 +197,7 @@ int main(int argc, char* argv[]) {
 					//User presses a key
  					else if (e.type == SDL_KEYDOWN)
 					{
-						switch (e.key.keysym.sym)
+						switch (e.key.keysym.sym)               //loading switch
 						{
 						case SDLK_SPACE:   //create communism
 							rect1.x = 0;
@@ -159,23 +225,24 @@ int main(int argc, char* argv[]) {
 
 
 						if (!loading_screen) {
-							switch (e.key.keysym.sym)
+							switch (e.key.keysym.sym)  //game switch
 							{
 							case SDLK_w:
-								PedroRect.y = PedroRect.y - 25;
+								shipRect.y = shipRect.y - 25;
 								break;
 							case SDLK_a:
-								PedroRect.x -= 20;
+								shipRect.x -= 20;
 								break;
 							case SDLK_s:
-								PedroRect.y += 20;
+								shipRect.y += 20;
 								break;
 							case SDLK_d:
-								PedroRect.x += 20;
+								shipRect.x += 20;
 								break;
 							case SDLK_SPACE:
 								shoot = true;
-
+								break;
+								
 							default:
 								break;
 
@@ -205,7 +272,10 @@ int main(int argc, char* argv[]) {
 
 
 
-
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	window = NULL;
+	renderer = NULL;
 	SDL_QUIT;
 	IMG_Quit();
 
