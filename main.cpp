@@ -129,8 +129,17 @@ int main(int argc, char* argv[]) {
 				
 
 				if (loading_screen) { //loading screen
-					//Fill the surface with a color
+
+
 					SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0x60, 0x16, 0xfa));
+					//Fill the surface with a color
+					SDL_SetRenderDrawColor(renderer, 0xfc, 0x17, 0x08, 1);
+					SDL_RenderDrawRect(renderer, &rect1);
+
+
+					SDL_SetRenderDrawColor(renderer, 0xff, 0xfb, 0x0d, 1);   //Arreglar y hacer con renderer
+					SDL_RenderDrawRect(renderer, &rect2);
+					
 
 					//fill the smoll rectangle
 					SDL_FillRect(screenSurface, &rect1, SDL_MapRGB(screenSurface->format, 0xfc, 0x17, 0x08));
@@ -165,11 +174,8 @@ int main(int argc, char* argv[]) {
 					//Fill the surface with a color
 					/*SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xf9, 0x78, 0x07));*/
 					//to create a rectangle wit the renderer
-					//SDL_SetRenderDrawColor(renderer, 0x4c, 0a6, 0xff, 1)
+					
 
-					/*SDL_FillRect(screenSurface, &PedroRect, SDL_MapRGB(screenSurface->format, 0x02, 0x92, 0x29));*/
-					
-					
 
 					SDL_RenderClear(renderer);    //Wipes everything and cleans up
 					
@@ -216,8 +222,6 @@ int main(int argc, char* argv[]) {
 							loading_screen = false;
 							break;
 
-
-						
 						default:
 							break;
 
