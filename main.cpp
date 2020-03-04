@@ -116,7 +116,7 @@ int main(int argc, char* argv[]) {
 
 
 			//create a smolll rectangle
-
+			SDL_Rect screenRect = {0,0, screenSurface->w, screenSurface->h};
 			SDL_Rect  rect1 = { 0, 0, 690, 420 };
 			SDL_Rect  rect2 = { 100, 250, 420, 69 };
 
@@ -130,22 +130,33 @@ int main(int argc, char* argv[]) {
 
 				if (loading_screen) { //loading screen
 
+					SDL_RenderClear(renderer);
 
-					SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0x60, 0x16, 0xfa));
-					//Fill the surface with a color
+
+					SDL_SetRenderDrawColor(renderer, 0xf0, 0x80, 0x10, 1);
+					SDL_RenderFillRect(renderer, &screenRect);
+
 					SDL_SetRenderDrawColor(renderer, 0xfc, 0x17, 0x08, 1);
-					SDL_RenderDrawRect(renderer, &rect1);
+					SDL_RenderFillRect(renderer, &rect1);
 
 
 					SDL_SetRenderDrawColor(renderer, 0xff, 0xfb, 0x0d, 1);   //Arreglar y hacer con renderer
-					SDL_RenderDrawRect(renderer, &rect2);
+					SDL_RenderFillRect(renderer, &rect2);
+
 					
 
-					//fill the smoll rectangle
-					SDL_FillRect(screenSurface, &rect1, SDL_MapRGB(screenSurface->format, 0xfc, 0x17, 0x08));
+					SDL_RenderPresent(renderer);
 
-					//fill the smoll rectangle 2 
-					SDL_FillRect(screenSurface, &rect2, SDL_MapRGB(screenSurface->format, 0xff, 0xfb, 0x0d));
+					
+					//Fill the surface with a color
+					
+					//SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0x60, 0x16, 0xfa));
+
+					////fill the smoll rectangle
+					//SDL_FillRect(screenSurface, &rect1, SDL_MapRGB(screenSurface->format, 0xfc, 0x17, 0x08));
+
+					////fill the smoll rectangle 2 
+					//SDL_FillRect(screenSurface, &rect2, SDL_MapRGB(screenSurface->format, 0xff, 0xfb, 0x0d));
 
 					
 
@@ -167,10 +178,7 @@ int main(int argc, char* argv[]) {
 					if (rect2.y + rect2.h > screenSurface->h) rect2.y = 0;
 				}
 				
-
-				
-				
-				if (!loading_screen) {
+				else /*(!loading_screen)*/ {
 					//Fill the surface with a color
 					/*SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xf9, 0x78, 0x07));*/
 					//to create a rectangle wit the renderer
@@ -185,12 +193,21 @@ int main(int argc, char* argv[]) {
 
 					SDL_RenderPresent(renderer);
 
+					if (shoot) {
+
+						SDL_RenderCopy(renderer, bulletTexture,NULL, &BulletRect);
+
+						if (BulletRect.x < screenSurface->w) {
+							BulletRect.x++;
+						}
+					}
+
 				}
 
 
-				//Update the surface
-				SDL_UpdateWindowSurface(window);
-
+				////Update the surface
+				//SDL_UpdateWindowSurface(window);
+				SDL_Delay(2);
 
 
 				while (SDL_PollEvent(&e) != 0) {
